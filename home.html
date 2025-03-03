@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Living Needs</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+</head>
+<body>
+    <script>
+        // carousel code
+        document.addEventListener("DOMContentLoaded", function () {
+            let currentIndex = 0;
+            const slides = document.querySelectorAll(".slide");
+            const totalSlides = slides.length;
+            const carouselImage = document.querySelector(".carousel-image");
+            const slideImages = [
+                "images/illustration(1).png",
+                "images/illustration(3).png",
+                "images/illustration(2).png"
+            ];
+
+            function showSlide(index) {
+                if (index >= totalSlides) {
+                    currentIndex = 0;
+                } else if (index < 0) {
+                    currentIndex = totalSlides - 1;
+                } else {
+                    currentIndex = index;
+                }
+
+                slides.forEach((slide, i) => {
+                    slide.classList.remove("active");
+                    slide.style.opacity = "0"; 
+                    slide.style.transition = "opacity 0.5s ease-in-out";
+                });
+
+                slides[currentIndex].classList.add("active");
+                slides[currentIndex].style.opacity = "1"; 
+                carouselImage.style.backgroundImage = `url('${slideImages[currentIndex]}')`;
+            }
+
+            function nextSlide() {
+                showSlide(currentIndex + 1);
+            }
+
+            function prevSlide() {
+                showSlide(currentIndex - 1);
+            }
+
+            let autoSlide = setInterval(nextSlide, 5000);
+
+            document.querySelector(".prev").addEventListener("click", () => {
+                clearInterval(autoSlide);
+                prevSlide();
+                autoSlide = setInterval(nextSlide, 5000);
+            });
+
+            document.querySelector(".next").addEventListener("click", () => {
+                clearInterval(autoSlide);
+                nextSlide();
+                autoSlide = setInterval(nextSlide, 5000);
+            });
+
+            showSlide(currentIndex);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const sections = document.querySelectorAll("section");
+            const navLinks = document.querySelectorAll(".nav-links li a");
+            // navbar change active link
+            function changeActiveLink() {
+                let currentSection = null;
+
+                sections.forEach((section) => {
+                    const sectionTop = section.offsetTop - 200; 
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                        currentSection = section.getAttribute("id");
+                    }
+                });
+
+                navLinks.forEach((link) => {
+                    link.classList.remove("active");
+                    if (currentSection && link.getAttribute("href").includes(currentSection)) {
+                        link.classList.add("active");
+                    }
+                });
+            }
+            window.addEventListener("scroll", changeActiveLink);
+            changeActiveLink(); 
+            
+            // navbar
+            function toggleMenu() {
+                let nav = document.querySelector(".nav-links");
+                nav.classList.toggle("open");
+            }
+            document.querySelector(".menu-toggle").addEventListener("click", toggleMenu);
+        });
+
+        // animation in services
+        document.addEventListener("DOMContentLoaded", function () {
+        const serviceItems = document.querySelectorAll(".services p");
+        let timeoutRefs = new Map();
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    if (!timeoutRefs.has(entry.target)) {
+                        const delay = index * 50; 
+                        timeoutRefs.set(entry.target, setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                entry.target.style.setProperty("--delay", `${delay}ms`);
+                                entry.target.classList.add("visible");
+                            });
+                        }, delay));
+                    }
+                } else {
+                    clearTimeout(timeoutRefs.get(entry.target));
+                    timeoutRefs.delete(entry.target);
+                    requestAnimationFrame(() => {
+                        entry.target.classList.remove("visible");
+                    });
+                }
+            });
+            }, { rootMargin: "7%", threshold: 0.2 }); 
+            serviceItems.forEach(item => observer.observe(item));
+        });
+
+    </script>
+
+    <header>
+        <nav>
+            <div class="logo"> 
+                <img src="images/logo1.png" alt="Living Needs Logo" style="width: 80px; height: auto;"> 
+            </div>            
+            <div class="menu-toggle">☰</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#our-working">Our Working</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#approach">Approach</a></li>
+                <li class="mobile-signup"><button class="primary">Sign-Up</button></li>
+            </ul>            
+            <button class="primary desktop-signup">Sign-Up</button>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="content">
+            <span class="badge">LivingNeeds <strong>Healthcare</strong></span>
+            <h1>Transforming the Future of <em>Healthcare</em></h1>
+                <div class="image-container">
+                    <picture>
+                        <source srcset="images/heroimgsmall.png" media="(max-width: 48em)">
+                        <img src="images/heroimg.png" alt="Doctors Illustration">
+                    </picture>
+                </div>
+            <p>Revolutionizing Healthcare with AI-Powered Solutions – Smart Appointments, Real-Time Queues & Data-Driven Insights for Seamless Patient Care.</p>
+            <div class="buttons">
+                <button class="primary">Book Meet</button>
+                <button class="primary">Learn More</button>
+            </div>
+        </div>
+    </section>
+    
+
+    <section class="What_We_Resolve">
+        <h2 class="heading">WHAT WE RESOLVE</h2>
+        <p class="intro-text">We deal with the root challenges in healthcare to ensure smooth, <em>patient-focused</em> solutions. 
+        <div class="resolve-container">
+            <div class="resolve-card">
+                <div class="icon"><img src="images/Delivery Time.png" alt="Clock Icon"></div>
+                <p>Cuts wait times, enhancing care.</p>
+            </div>
+            <div class="resolve-card">
+                <div class="icon"><img src="images/User.png" alt="User Icon"></div>
+                <p>Provides a user- and management-focused design.</p>
+            </div>
+            <div class="resolve-card">
+                <div class="icon"><img src="images/Request Service.png" alt="Settings Icon"></div>
+                <p>Manages multiple hospital functions.</p>
+            </div>
+            <div class="resolve-card">
+                <div class="icon"><img src="images/Hospital.png" alt="Hospital Icon"></div>
+                <p>Lightens hospital workload.</p>
+            </div>
+            <div class="resolve-card">
+                <div class="icon"><img src="images/Data Quality.png" alt="Checklist Icon"></div>
+                <p>Tracks progress and analyzes data.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="our-working" class="Our_Working">
+        <h2 class="heading">HOW WE WORK</h2>
+        <p class="intro-text">
+            We simplify healthcare with a consistent patient-centric approach. Our procedure ensures dynamic solutions, combining technology, expertise, and empathy for finer outcomes.
+        </p>
+        <div class="carousel">
+            <button class="prev">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18l-6-6 6-6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="black"/>
+                </svg>
+            </button>    
+            <div class="carousel-content">
+                <div class="slide active">
+                    <h3>Provides <em>queue management</em> to the patients</h3>
+                    <p>
+                        Provides patients and hospitals with the best way to manage and regulate the queue without spending time and removing time complexity, 
+                        thus ensuring that the consultation process gets easier.
+                    </p>
+                </div>
+                <div class="slide">
+                    <h3>Generates <em>revenue</em> for <em>hospitals</em></h3>
+                    <p>Empowers hospitals to discover innovative and effective strategies for maximizing their potential, unlocking new opportunities for growth and success in unexpected ways.</p>
+                </div>
+                <div class="slide">
+                    <h3>Provides <em> analytics</em> and monthly <em>reports</em> for <em>everyone</em></h3>
+                    <p>Delivers insightful analytics and comprehensive monthly reports, offering valuable insights that drive informed decisions and unlock new opportunities for growth.</p>
+                </div>
+            </div>  
+            <div class="carousel-image"></div>
+            <button class="next">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18l6-6-6-6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="black"/>
+                </svg>
+            </button>
+        </div>
+    </section>
+    
+    <section id="services" class="services">
+        <h2 class="heading">OUR SERVICES</h2>
+        <div>
+            <p>Kiosk Based appointment system</p>
+            <p>Monthly Patient Analytics</p>
+            <p>Automated Patient Detection</p>
+            <p>Whatsapp Chatbot </p>
+            <p>Online Appointment System</p>
+            <p>Performance Tracker</p>
+            <p>Queue Management</p>
+          </div>
+    </section>
+
+    <section class="Why_Us">
+        <div class="heading-container">
+            <h2 class="heading">WHY US</h2>
+        </div>
+        
+        <div class="content-wrapper">
+            <p class="text">
+                We resolve the errors and the challenges in healthcare to provide 
+                smooth functioning, exponential growth,<br/> and bring harmony to your 
+                hospitality and focus to improve and resolve each possible cause.
+            </p>
+    
+            <div class="container1">
+                <div class="card">
+                    <img src="images/handshake.svg" alt="Reliable Icon">
+                    <span>Reliable and Efficient</span>
+                </div>
+                <div class="card">
+                    <img src="images/speed.png" alt="Performance Icon">
+                    <span>Performance Centric</span>
+                </div>  
+                <div class="card">
+                    <img src="images/convenience.png" alt="Convenience Icon">
+                    <span>Convenient And Personalized</span>
+                </div>
+                <div class="card">
+                    <img src="images/dashboard.png" alt="Dashboard Icon">
+                    <span>Analytical Dashboard</span>
+                </div>
+                <div class="card">
+                    <img src="images/progress.png" alt="Tracking Icon">
+                    <span>Progress And Doctor Tracking</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="meet-us">
+        <h2 class="heading" style="margin-bottom: 0.7em;">Meet The Faces</h2>
+        <div class="meetus-wrapper">
+            <div class="image">
+                <img src="images/illustration(4).png" alt="Illustration">
+            </div>
+            <div class="meetus-content">
+                <p class="intro-text">
+                    Let's introduce the brilliant minds behind this groundbreaking concept—visionaries who not only conceived this remarkable idea but also worked tirelessly to bring it to life. 
+                    Their dedication and innovation transformed this vision into reality, ultimately leading to the successful implementation and enforcement of this extraordinary initiative.
+                </p>
+                <button class="primary" style="margin-top: 1.5em;">Explore</button>
+            </div>
+        </div>
+    </section>    
+
+    <section id="approach" class="contact">
+        <div class="container">
+            <div class="contact-form">
+                <h2 class="heading">GET IN TOUCH</h2>
+                <p>Elevate your hospitality services with our legacy of excellence. Join us for premium solutions that enhance guest experiences and grow your business!</p>
+                <div class="input-group">
+                    <input type="text" placeholder="Enter Your Name">
+                </div>
+                <div class="input-group">
+                    <input type="email" placeholder="Enter Your Mail Id">
+                </div>
+                <div class="input-group">
+                    <textarea placeholder="Enter Your Message"></textarea>
+                </div>
+                <button class="primary">Send Message</button>
+            </div>
+            <div class="contact-info">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.047495534515!2d73.02288167487268!3d26.260121887831524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39418dcaf4306809%3A0xba2f9a0cecadfea!2sIStart%20Nest%20Incubation%20Center!5e0!3m2!1sen!2sin!4v1740586725051!5m2!1sen!2sin" width="400" height="300" style="border:0;border-radius: 1.5em;margin-bottom: 1em;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p><i class="fas fa-map-marker-alt"></i> LivingNeeds Healthcare Pvt. Ltd., P No. 57, Shivam Residency, Pal Nandanwan, Jodhpur - 342008</p>
+                <p><i class="fas fa-phone-alt"></i> +91-636-755-5382</p>
+                <p><i class="fas fa-envelope"></i> livingneeds.org@gmail.com</p>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <img src="images/logo.png" alt="LivingNeeds Logo" class="logo">
+                <p class="footer-text">
+                    Transforming healthcare experience through smart queue management and patient care services
+                </p>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Appointment</a></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms Of Services</a></li>
+                    <li><a href="#">Data Security</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>Get In-Touch With Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <h4>Subscribe To Our Newsletter</h4>
+                <div class="newsletter">
+                    <input type="email" placeholder="Enter Your Mail">
+                    <button><i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 LivingNeeds. All rights reserved.
+        </div>
+    </footer>
+    
+</body>
+</html>
