@@ -215,6 +215,7 @@ p {
     margin: 0.7em;
     position: relative;
     overflow: hidden;
+    padding-bottom: 1em;
 }
 
 .image-container {
@@ -247,7 +248,7 @@ p {
 }
 
 /* Responsive Adjustments */
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 69em) {
     .hero {
         display: flex;
         flex-direction: column;
